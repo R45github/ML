@@ -1,3 +1,22 @@
+-- Type-specific entity tables
+table_aws_instance:
+  _key (PK) | instanceId | instanceType | vpcId | publicIpAddress
+  i-0abc123 | i-0abc123  | t3.large     | vpc-1 | 54.1.2.3
+
+table_crowdstrike_device:
+  _key (PK)  | deviceId | hostname      | agentVersion
+  cs-device-1| 12345    | CORP-WEB-01   | 6.42
+
+table_qualys_finding:
+  _key (PK)    | qid    | severity | status
+  qualys-vuln-1| 38170  | 5        | Active
+
+-- The graph edges (exported by J1DS separately)
+table_relationships:
+  _fromEntityKey | _toEntityKey | relationshipType | _class
+  i-0abc123      | cs-device-1  | HAS              | Host
+  cs-device-1    | qualys-vuln-1| IDENTIFIED       | Finding
+-------------------------------------------------------------------
 SELECT 
   aws.instanceId,
   aws.instanceType,
