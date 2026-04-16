@@ -1,8 +1,22 @@
-Asset/Entity (The Actual Instance)
-├── _key: "i-0abc123"           ← Unique ID of THIS specific server
-├── _class: "Host"              ← The category (what it IS)
-├── _type: "aws_instance"       ← The source (where it came from)
-└── Properties:                 ← The attributes
-    ├── instanceId: "i-0abc123"
-    ├── state: "running"
-    └── vpcId: "vpc-789"
+SELECT 
+  aws.instanceId,
+  aws.instanceType,
+  cs.hostname as crowdstrike_hostname,
+  cs.agentVersion,
+  qualys.qid,
+  qualys.severity
+FROM table_aws_instance aws
+
+-- Join AWS instance to its CrowdStrike device
+JOIN table_relationships rel1 
+  ON aws._key = rel1._fromEntityKey
+JOIN table_crowdstrike_device cs 
+  ON rel1._toEntityKey = cs._key
+
+-- Join CrowdStrike device to its vulnerabilities  
+JOIN table_relationships rel2
+  ON cs._key = rel2._fromEntityKey
+JOIN table_qualys_finding qualys
+  ON rel2._toEntityKey = qualys._key
+
+WHERE qualys.status = 'Active';
