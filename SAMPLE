@@ -1,0 +1,8 @@
+Asset/Entity (The Actual Instance)
+├── _key: "i-0abc123"           ← Unique ID of THIS specific server
+├── _class: "Host"              ← The category (what it IS)
+├── _type: "aws_instance"       ← The source (where it came from)
+└── Properties:                 ← The attributes
+    ├── instanceId: "i-0abc123"
+    ├── state: "running"
+    └── vpcId: "vpc-789"
